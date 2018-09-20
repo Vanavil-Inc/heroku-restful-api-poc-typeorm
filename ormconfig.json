@@ -1,0 +1,26 @@
+{
+    "type": "postgres",
+    "host": "ec2-23-21-147-71.compute-1.amazonaws.com",
+    "port": 5432,
+    "username": "slfpatnnvznzzp",
+    "password": "92577ee2749c73e7d71934a3a7ba0b5292c71ac5a42a9ad6c57ca35907433bef",
+    "database": "d6r4288m4p1qat",
+    "schema": "salesdata",
+    "synchronize": true,
+    "ssl": true,
+    "logging": true,
+    "entities": [
+      "src/entity/*.js"
+    ],
+    "subscribers": [
+      "src/subscriber/*.js"
+    ],
+    "migrations": [
+      "src/migration/*.js"
+    ],
+    "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+    }
+}

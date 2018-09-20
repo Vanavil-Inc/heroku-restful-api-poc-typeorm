@@ -1,0 +1,36 @@
+{
+   "name": "heroku-restful-api-poc-typeorm",
+   "version": "0.3.0",
+   "description": "A sample Node.js app using Express 4",
+   "engines": {
+      "node": "8.9.1"
+   },
+   "main": "index.js",
+   "scripts": {
+      "start": "tsc && node src/index.js",
+      "test": "node test.js"
+   },
+   "dependencies": {
+      "ejs": "^2.5.6",
+      "express": "^4.16.3",
+      "body-parser": "^1.18.2",
+      "pg": "^7.4.3",
+      "typeorm": "0.2.7"
+   },
+   "devDependencies": {
+      "@types/body-parser": "^1.16.8",
+      "@types/express": "^4.11.1",
+      "@types/node": "^9.6.5",
+      "typescript": "^2.8.1"
+   },
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/heroku/node-js-getting-started"
+   },
+   "keywords": [
+      "node",
+      "heroku",
+      "express"
+   ],
+   "license": "MIT"
+}
