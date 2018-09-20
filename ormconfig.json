@@ -6,7 +6,7 @@
     "password": "92577ee2749c73e7d71934a3a7ba0b5292c71ac5a42a9ad6c57ca35907433bef",
     "database": "d6r4288m4p1qat",
     "schema": "salesdata",
-    "synchronize": true,
+    "synchronize": false,
     "ssl": true,
     "logging": true,
     "entities": [
