@@ -33,6 +33,16 @@ exports.AppRoutes = [
     },
     {
         path: "/accounts/:id",
+        method: "put",
+        action: AccountUpdateByIdAction_1.accountUpdateByIdAction
+    },
+    {
+        path: "/accounts/:id",
+        method: "delete",
+        action: AccountDeleteByIdAction_1.accountDeleteByIdAction
+    },
+    {
+        path: "/accounts/:id",
         method: "delete",
         action: AccountDeleteByIdAction_1.accountDeleteByIdAction
     },

@@ -1,6 +1,8 @@
 import { accountGetAllAction } from "../controller/AccountGetAllAction";
 import { accountGetByIdAction } from "../controller/AccountGetByIdAction";
 import { accountSaveAction } from "../controller/AccountSaveAction";
+import { accountDeleteByIdAction } from "../controller/AccountDeleteById";
+import { accountUpdateByIdAction } from "../controller/AccountUpdateByIdAction";
 
 import {contactSaveAction} from "../controller/ContactSaveAction"
 import { contactGetAllAction } from "../controller/ContactGetAllAction";
@@ -8,6 +10,7 @@ import { contactGetByIdAction } from "../controller/ContactGetByIdAction";
 import {contactDeleteByIdAction}  from "../controller/ContactDeleteByIdAction";
 import {contactUpdateByIdAction} from "../controller/ContactUpdateByIdAction";
 
+ 
 
 /**
  * All application routes.
@@ -27,6 +30,16 @@ export const AppRoutes = [
         path: "/accounts",
         method: "post",
         action: accountSaveAction
+    },
+    {
+        path: "/accounts/:id",
+        method: "delete",
+        action: accountDeleteByIdAction
+    },
+    {
+        path: "/accounts/:id",
+        method: "put",
+        action: accountUpdateByIdAction
     },
     {
         path: "/contacts",
