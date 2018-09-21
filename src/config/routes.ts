@@ -1,6 +1,6 @@
-import {accountGetAllAction} from "./controller/AccountGetAllAction";
-import {accountGetByIdAction} from "./controller/AccountGetByIdAction";
-import {accountSaveAction} from "./controller/AccountSaveAction";
+import { accountGetAllAction } from "../controller/AccountGetAllAction";
+import { accountGetByIdAction } from "../controller/AccountGetByIdAction";
+import { accountSaveAction } from "../controller/AccountSaveAction";
 
 /**
  * All application routes.

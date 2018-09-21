@@ -12,7 +12,7 @@ require("reflect-metadata");
 const typeorm_1 = require("typeorm");
 const express = require("express");
 const bodyParser = require("body-parser");
-const routes_1 = require("./src/routes");
+const routes_1 = require("./src/config/routes");
 
 //port number to run the app
 const port = process.env.PORT || 5000

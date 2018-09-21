@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import {getManager} from "typeorm";
-import {Account} from "../entity/Account";
+import { Account } from "../entity/Account";
 
 /**
  * Saves given account.
