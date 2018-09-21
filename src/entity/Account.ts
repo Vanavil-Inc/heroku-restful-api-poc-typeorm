@@ -1,9 +1,6 @@
 import {Index,Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
-@Index("hc_idx_account_lastmodifieddate",["lastmodifieddate",])
-@Index("hcu_idx_account_sfid",["sfid",],{unique:true})
-@Index("hc_idx_account_systemmodstamp",["systemmodstamp",])
 export class Account {
 
     @Column()
