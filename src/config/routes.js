@@ -11,7 +11,9 @@ const ContactGetAllAction_1 = require("../controller/ContactGetAllAction");
 const ContactGetByIdAction_1 = require("../controller/ContactGetByIdAction");
 const ContactDeleteByIdAction_1 = require("../controller/ContactDeleteByIdAction");
 const ContactUpdateByIdAction_1 = require("../controller/ContactUpdateByIdAction");
+const UserController_1 = require("../controller/UserController");
 
+// const verifyToken_1 = require("../../app");
 /**
  * All application routes.
  */
@@ -66,6 +68,11 @@ exports.AppRoutes = [
         path: "/contacts/:id",
         method: "put",
         action: ContactUpdateByIdAction_1.contactUpdateByIdAction
+    },
+    {
+        path: "/login",
+        method: "post",
+        action: UserController_1.login
     }
 ];
 //# sourceMappingURL=routes.js.map

@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const Contact_1 = require("../entity/Contact");
+const User = require("../controller/UserController");
+const key = require("../config/secret");
 /**
  * Loads all accounts from the database.
  */
@@ -21,6 +23,7 @@ function contactGetAllAction(request, response) {
         const contacts = yield contactRepository.find();
         // return loaded accounts
         response.send(contacts);
+
     });
 }
 exports.contactGetAllAction = contactGetAllAction;
