@@ -10,22 +10,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const Contact_1 = require("../entity/Contact");
+const User = require("../controller/UserController");
 
 function contactUpdateByIdAction(request, response) {
-    return __awaiter(this, void 0, void 0, function* () {
- 
-        const contactRepository = typeorm_1.getManager().getRepository(Contact_1.Contact);
+    let authorizationHeader = request.headers['authorization'] || request.headers['Authorization']
+    if (typeof authorizationHeader !== 'undefined') {
+    let [, token] = authorizationHeader.split(' ');
     
-        const contact = yield contactRepository.update(request.params.id, request.body);
- 
-        if (!contact) {
-            response.status(404);
-            response.end();
-            return;
-        }
-        // return loaded account
-        response.send(contact);
-    });
+    if (token != User.getToken()) {
+        response.sendStatus(403) // Forbidden, you're not logged in
+        console.log("User not logged in");
+    } else {
+        return __awaiter(this, void 0, void 0, function* () {
+    
+            const contactRepository = typeorm_1.getManager().getRepository(Contact_1.Contact);
+        
+            const contact = yield contactRepository.update(request.params.id, request.body);
+    
+            if (!contact) {
+                response.status(404);
+                response.end();
+                return;
+            }
+            // return loaded account
+            response.send(contact);
+        });
+    }
+  } else {
+    response.sendStatus(403);
+    }
 }
 exports.contactUpdateByIdAction = contactUpdateByIdAction;
 //# sourceMappingURL=AccountGetByIdAction.js.map

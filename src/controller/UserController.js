@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 var key = require("../config/secret");
-
+var mToken;
 
 async function login(req,res) {
 
@@ -17,34 +17,18 @@ async function login(req,res) {
         res.json({
           token
         });
-        console.log(token);
+        setToken(token);
+
     }
     
 )};
 
-async function verifyToken (req, res, next) {
-    //Get Authorization Header Value
-    const bearerHeader = req.headers['authorization'];
-  
-    //Check if bearer is undefined 
-    if (typeof bearerHeader !== 'undefined') {
-      //Split at the space 
-      const bearer = bearerHeader.split(' ');
-  
-      //Get Access Token from the split array 
-      const bearerToken = bearer[1];
-  
-      //Set the token
-      req.token = bearerToken;
-  
-      //Call teh next middleware
-      next();
-  
-    } else {
-      //Forbidden Access
-      res.sendStatus(403);
-    }
-  
-  }
+function setToken(token){
+    mToken = token;
+}
+function getToken(){
+  return mToken;
+}
 
-  module.exports = { login, verifyToken};
+
+  module.exports = { login,getToken};

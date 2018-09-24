@@ -10,10 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const Contact_1 = require("../entity/Contact");
+const User = require("../controller/UserController");
 /**
  * Loads account by a given id.
  */
 function contactGetByIdAction(request, response) {
+    let authorizationHeader = request.headers['authorization'] || request.headers['Authorization']
+    if (typeof authorizationHeader !== 'undefined') {
+    let [, token] = authorizationHeader.split(' ');
+    
+    if (token != User.getToken()) {
+        response.sendStatus(403) // Forbidden, you're not logged in
+        console.log("User not logged in");
+    } else {
     return __awaiter(this, void 0, void 0, function* () {
         // get a account repository to perform operations with account
         const contactRepository = typeorm_1.getManager().getRepository(Contact_1.Contact);
@@ -28,6 +37,10 @@ function contactGetByIdAction(request, response) {
         // return loaded account
         response.send(contact);
     });
+  }
+} else { 
+    response.sendStatus(403);
+ }
 }
 exports.contactGetByIdAction = contactGetByIdAction;
 //# sourceMappingURL=ContactGetByIdAction.js.map
