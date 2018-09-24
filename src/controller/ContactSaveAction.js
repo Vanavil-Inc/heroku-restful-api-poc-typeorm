@@ -24,7 +24,7 @@ function contactSaveAction(request, response) {
         response.sendStatus(403) // Forbidden, you're not logged in
         console.log("User not logged in");
     } else {
-        let validator = new v(request.body,{birthdate:'required'});
+        let validator = new v(request.body,{name:'required|string', birthdate:'required', email:'required|email'});
         validator.check().then(function (matched) {
             if(matched) {
                 return __awaiter(this, void 0, void 0, function* () {

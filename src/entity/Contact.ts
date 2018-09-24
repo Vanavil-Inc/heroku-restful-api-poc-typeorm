@@ -1,5 +1,4 @@
-import {Index,Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
-
+import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 
 @Entity("contacts")
 export class Contact {
