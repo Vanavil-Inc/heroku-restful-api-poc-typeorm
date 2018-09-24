@@ -18,7 +18,7 @@ function accountGetAllAction(request, response) {
     let authorizationHeader = request.headers['authorization'] || request.headers['Authorization']
     if (typeof authorizationHeader !== 'undefined') {
     let [, token] = authorizationHeader.split(' ');
-    
+
     if (token != User.getToken()) {
         response.sendStatus(403) // Forbidden, you're not logged in
         console.log("User not logged in");

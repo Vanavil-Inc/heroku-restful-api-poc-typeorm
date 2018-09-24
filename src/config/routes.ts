@@ -1,5 +1,6 @@
 import { accountGetAllAction } from "../controller/AccountGetAllAction";
 import { accountGetByIdAction } from "../controller/AccountGetByIdAction";
+import { accountGetByPageAction } from "../controller/AccountGetByPageAction";
 import { accountSaveAction } from "../controller/AccountSaveAction";
 import { accountDeleteByIdAction } from "../controller/AccountDeleteById";
 import { accountUpdateByIdAction } from "../controller/AccountUpdateByIdAction";
@@ -10,7 +11,7 @@ import { contactGetByIdAction } from "../controller/ContactGetByIdAction";
 import {contactDeleteByIdAction}  from "../controller/ContactDeleteByIdAction";
 import {contactUpdateByIdAction} from "../controller/ContactUpdateByIdAction";
 
- 
+
 
 /**
  * All application routes.
@@ -25,6 +26,11 @@ export const AppRoutes = [
         path: "/accounts/:id",
         method: "get",
         action: accountGetByIdAction
+    },
+    {
+        path: "/accounts/page/:id",
+        method: "get",
+        action: accountGetByPageAction
     },
     {
         path: "/accounts",

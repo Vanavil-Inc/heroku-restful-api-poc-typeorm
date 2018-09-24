@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const AccountGetAllAction_1 = require("../controller/AccountGetAllAction");
 const AccountGetByIdAction_1 = require("../controller/AccountGetByIdAction");
+const AccountGetByPageAction_1 = require("../controller/AccountGetByPageAction");
 const AccountSaveAction_1 = require("../controller/AccountSaveAction");
 const AccountDeleteByIdAction_1 = require("../controller/AccountDeleteById");
 const AccountUpdateByIdAction_1 = require("../controller/AccountUpdateByIdAction");
@@ -28,6 +29,11 @@ exports.AppRoutes = [
         path: "/accounts/:id",
         method: "get",
         action: AccountGetByIdAction_1.accountGetByIdAction
+    },
+    {
+        path: "/accounts/page/:id",
+        method: "get",
+        action: AccountGetByPageAction_1.accountGetByPageAction
     },
     {
         path: "/accounts",
