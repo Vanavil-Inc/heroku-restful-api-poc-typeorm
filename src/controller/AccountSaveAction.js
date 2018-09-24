@@ -11,6 +11,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const Account_1 = require("../entity/Account");
 const User = require("../controller/UserController");
+const v = require('node-input-validator');
+
+
 /**
  * Saves given account.
  */
@@ -22,18 +25,23 @@ function accountSaveAction(request, response) {
     if (token != User.getToken()) {
         response.sendStatus(403) // Forbidden, you're not logged in
         console.log("User not logged in");
-    } else {
-        return __awaiter(this, void 0, void 0, function* () {
-            // get a account repository to perform operations with account
-            const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
-            // create a real account object from account json object sent over http
-            const newAccount = accountRepository.create(request.body);
-            // save received accountv
-            yield accountRepository.save(newAccount);
-            // return saved account back
-            response.send(newAccount);
-        });
-    }
+    } else {   
+        let validator = new v(request.body,{name:'required', phone:'required'});
+            validator.check().then(function (matched) {
+                if(matched) {
+                    return __awaiter(this, void 0, void 0, function* () {
+                        const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
+                        const newAccount = accountRepository.create(request.body);
+                        yield accountRepository.save(newAccount);
+                        response.send(newAccount);
+                    });
+                }  
+                else{
+                   console.log("Invalid input");
+                    return "Try again";
+                }
+            });
+        }
   } else {
         response.sendStatus(403);
     }

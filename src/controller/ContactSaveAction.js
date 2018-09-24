@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const Contact_1 = require("../entity/Contact");
 const User = require("../controller/UserController");
+const v = require('node-input-validator');
 /**
  * Saves given account.
  */
@@ -23,17 +24,26 @@ function contactSaveAction(request, response) {
         response.sendStatus(403) // Forbidden, you're not logged in
         console.log("User not logged in");
     } else {
-    return __awaiter(this, void 0, void 0, function* () {
-        // get a account repository to perform operations with account
-        const contactRepository = typeorm_1.getManager().getRepository(Contact_1.Contact);
-        // create a real account object from account json object sent over http
-        const newContact = contactRepository.create(request.body);
-        // save received accountv
-        yield contactRepository.save(newContact);
-        // return saved account back
-        response.send(newContact);
-    });
-  } 
+        let validator = new v(request.body,{birthdate:'required'});
+        validator.check().then(function (matched) {
+            if(matched) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    // get a account repository to perform operations with account
+                    const contactRepository = typeorm_1.getManager().getRepository(Contact_1.Contact);
+                    // create a real account object from account json object sent over http
+                    const newContact = contactRepository.create(request.body);
+                    // save received accountv
+                    yield contactRepository.save(newContact);
+                    // return saved account back
+                    response.send(newContact);
+                });
+            }
+            else{
+                console.log("Invalid input");
+                return "Try again";
+            }
+        });
+    }
 } else {
         response.sendStatus(403);
     }

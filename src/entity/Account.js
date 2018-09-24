@@ -24,12 +24,12 @@ __decorate([
 
 __decorate([
     typeorm_1.Column(),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], Account.prototype, "phone", void 0);
 
 __decorate([
     typeorm_1.Column(),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], Account.prototype, "shippinglongitude", void 0);
 
 __decorate([

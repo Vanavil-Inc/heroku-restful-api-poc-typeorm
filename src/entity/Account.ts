@@ -1,4 +1,4 @@
-import {Index,Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 export class Account {
@@ -8,6 +8,7 @@ export class Account {
         
     @Column()
     shippingstate:string;
+
         
     @Column()
     shippingpostalcode:string;
@@ -33,8 +34,12 @@ export class Account {
     @Column()
     lastmodifieddate:Date;
         
-    @Column()
-    phone:string;
+    @Column("character varying",{ 
+        nullable:true,
+        length:40,
+        name:"phone"
+        })
+    phone:string | null;
         
     @Column()
     isdeleted:boolean;
