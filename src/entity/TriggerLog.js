@@ -73,6 +73,9 @@ __decorate([
     __metadata("design:type", String)
 ], _trigger_log.prototype, "sf_message", void 0);
 
+_trigger_log = __decorate([
+    typeorm_1.Entity()
+], _trigger_log);
 
 exports._trigger_log = _trigger_log;
 //# sourceMappingURL=Contact.js.map 
