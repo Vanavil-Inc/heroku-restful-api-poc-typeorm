@@ -31,8 +31,9 @@ function triggerAllLogs(request, response) {
             ).getMany();
 
             // response.send(triggerLog);
+            console.log("*********Polling for new CDC dat Started************");
             console.log(triggerLog);
-            
+            console.log("*********Polling for new CDC dat Ended************");
         }); 
  }
 
