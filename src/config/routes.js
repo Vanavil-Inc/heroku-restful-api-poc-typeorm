@@ -13,7 +13,7 @@ const ContactGetByIdAction_1 = require("../controller/ContactGetByIdAction");
 const ContactDeleteByIdAction_1 = require("../controller/ContactDeleteByIdAction");
 const ContactUpdateByIdAction_1 = require("../controller/ContactUpdateByIdAction");
 const UserController_1 = require("../controller/UserController");
-const TriggerLogs_1 = require("../controller/TriggerLogController");
+const TriggerLogs_1 = require("../services/TriggerLogService");
 
 // const verifyToken_1 = require("../../app");
 /**

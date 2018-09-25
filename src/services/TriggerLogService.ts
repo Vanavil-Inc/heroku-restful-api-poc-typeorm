@@ -5,7 +5,7 @@ import {_trigger_log} from "../entity/TriggerLog";
 /**
  * Loads all accounts from the database.
  */
-export async function contactGetAllAction(request: Request, response: Response) {
+export async function triggerAllLogs(request: Request, response: Response) {
 
     // get a account repository to perform operations with account
     const contactRepository = getManager().getRepository(_trigger_log);

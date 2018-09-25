@@ -11,6 +11,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const TriggerLog_1 = require("../entity/TriggerLog");
 const User = require("../controller/UserController");
+
+var minutes = 5;
+var the_interval = minutes * 60 * 1000;
 /**
  * Loads account by a given id.
  */
@@ -18,7 +21,9 @@ function triggerAllLogs(request, response) {
     let authorizationHeader = request.headers['authorization'] || request.headers['Authorization']
     if (typeof authorizationHeader !== 'undefined') {
     let [, token] = authorizationHeader.split(' ');
-    
+
+    // const intervalObj = setInterval(() => {
+
     if (token != User.getToken()) {
         response.sendStatus(403) // Forbidden, you're not logged in
         console.log("User not logged in");
@@ -27,12 +32,18 @@ function triggerAllLogs(request, response) {
             // get a account repository to perform operations with account
             const triggerRepository = typeorm_1.getManager().getRepository(TriggerLog_1._trigger_log);
             // load a account by a given account id
-            const trigger = yield triggerRepository.find();
-            // if account was not found return 404 to the client
-            response.send(trigger);
+            // const trigger = yield triggerRepository.find();
+
+            // get last 5 minutes data from the logs
+            const triggerLog = yield triggerRepository.createQueryBuilder("_trigger_log").where(
+                "created_at > NOW() - INTERVAL '5 minutes'"
+            ).getMany();
+
+            response.send(triggerLog);
         });
     }
-  } else {
+//   } , 3000);
+} else {
         response.sendStatus(403);
     }
 }
