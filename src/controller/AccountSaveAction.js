@@ -7,43 +7,49 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const Account_1 = require("../entity/Account");
 const User = require("../controller/UserController");
-const v = require('node-input-validator');
+const validatorColumn = require('node-input-validator');
 
 
 /**
  * Saves given account.
  */
-function accountSaveAction(request, response) {
-    let authorizationHeader = request.headers['authorization'] || request.headers['Authorization']
-    if (typeof authorizationHeader !== 'undefined') {
+function accountSaveAction(request, response, next) {
+    let authorizationHeader = request.headers['authorization'] || request.headers['Authorization'];
     let [, token] = authorizationHeader.split(' ');
-    
-    if (token != User.getToken()) {
-        response.sendStatus(403) // Forbidden, you're not logged in
-        console.log("User not logged in");
-    } else {   
-        let validator = new v(request.body,{name:'required|string', phone:'required'});
-            validator.check().then(function (matched) {
-                if(matched) {
-                    return __awaiter(this, void 0, void 0, function* () {
+    if (typeof authorizationHeader !== 'undefined') {
+       
+        if(token != User.getToken()){
+            response.sendStatus(400);
+            console.log("User not logged in");
+        }else{
+            return __awaiter(this, void 0, void 0, function* () {
+                let validator = new validatorColumn(request.body,{name:'required|string'});
+                validator.check().then(function (matched){
+                    if(matched) {
                         const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
                         const newAccount = accountRepository.create(request.body);
-                        yield accountRepository.save(newAccount);
-                        response.send(newAccount);
-                    });
-                }  
-                else{
-                   console.log("Invalid input");
-                    return "Try again";
-                }
+                        accountRepository.save(newAccount);
+                        response.json({
+                            success: true,
+                            message:"Successfully Inserted",
+                            result: newAccount
+                        })
+                    } else{
+                        response.json({
+                            success: false,
+                            message:"Please Enter the Name"
+                        })
+                    }
+                });
             });
         }
-  } else {
-        response.sendStatus(403);
+    }else{
+        response.sendStatus(400);
     }
 }
 exports.accountSaveAction = accountSaveAction;

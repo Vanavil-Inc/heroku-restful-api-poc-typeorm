@@ -17,30 +17,33 @@ const User = require("../controller/UserController");
 function contactGetByIdAction(request, response) {
     let authorizationHeader = request.headers['authorization'] || request.headers['Authorization']
     if (typeof authorizationHeader !== 'undefined') {
-    let [, token] = authorizationHeader.split(' ');
-    
-    if (token != User.getToken()) {
-        response.sendStatus(403) // Forbidden, you're not logged in
-        console.log("User not logged in");
-    } else {
-    return __awaiter(this, void 0, void 0, function* () {
-        // get a account repository to perform operations with account
-        const contactRepository = typeorm_1.getManager().getRepository(Contact_1.Contact);
-        // load a account by a given account id
-        const contact = yield contactRepository.findOne(request.params.id);
-        // if account was not found return 404 to the client
-        if (!contact) {
-            response.status(404);
-            response.end();
-            return;
+        let [, token] = authorizationHeader.split(' ');
+        
+        if (token != User.getToken()) {
+            response.sendStatus(400) // Forbidden, you're not logged in
+            console.log("User not logged in");
+        } else {
+            return __awaiter(this, void 0, void 0, function* () {
+                // get a account repository to perform operations with account
+                const contactRepository = typeorm_1.getManager().getRepository(Contact_1.Contact);
+                // load a account by a given account id
+                const contact = yield contactRepository.findOne(request.params.id);
+                // if account was not found return 404 to the client
+                if (!contact) {
+                    response.status(404);
+                    response.end();
+                    return;
+                }
+                // return loaded account
+                response.json({
+                    success: true,
+                    result: contact
+                });
+            });
         }
-        // return loaded account
-        response.send(contact);
-    });
-  }
-} else { 
-    response.sendStatus(403);
- }
+    } else { 
+        response.sendStatus(400);
+    }
 }
 exports.contactGetByIdAction = contactGetByIdAction;
 //# sourceMappingURL=ContactGetByIdAction.js.map

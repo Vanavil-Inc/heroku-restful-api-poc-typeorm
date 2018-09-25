@@ -15,30 +15,31 @@ const User = require("../controller/UserController");
 function accountDeleteByIdAction(request, response) {
     let authorizationHeader = request.headers['authorization'] || request.headers['Authorization']
     if (typeof authorizationHeader !== 'undefined') {
-    let [, token] = authorizationHeader.split(' ');
-    
-    if (token != User.getToken()) {
-        response.sendStatus(403) // Forbidden, you're not logged in
-        console.log("User not logged in");
-    } else {
-        return __awaiter(this, void 0, void 0, function* () {
+        let [, token] = authorizationHeader.split(' ');
         
-            const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
-        
-            const account = yield accountRepository.delete(request.params.id);
+        if (token != User.getToken()) {
+            response.sendStatus(403) // Forbidden, you're not logged in
+            console.log("User not logged in");
+        } else {
+            return __awaiter(this, void 0, void 0, function* () {
+            
+                const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
+            
+                const account = yield accountRepository.delete(request.params.id);
 
-            if (!account) {
-                response.status(404);
-                response.end();
-                return;
-            }
-    
-            response.send(account);
-        });
-    }
-     
-  } else {
-             response.sendStatus(403);
+                if (!account) {
+                    response.status(404);
+                    response.end();
+                    return;
+                }
+                response.json({
+                    success: true,
+                    message:"Deleted Successfully",
+                });
+            });
+        }
+    } else {
+        response.sendStatus(400);
     }
 }
 exports.accountDeleteByIdAction = accountDeleteByIdAction;

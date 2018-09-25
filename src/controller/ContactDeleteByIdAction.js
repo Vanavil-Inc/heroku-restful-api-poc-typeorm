@@ -35,7 +35,10 @@ function contactDeleteByIdAction(request, response) {
                 return;
             }
             // return loaded account
-            response.send(contact);
+            response.json({
+                success: true,
+                message:"Deleted Successfully",
+            });
         });
     }
   } else {

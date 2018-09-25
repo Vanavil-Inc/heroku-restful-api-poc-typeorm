@@ -34,11 +34,7 @@ export class Account {
     @Column()
     lastmodifieddate:Date;
         
-    @Column("character varying",{ 
-        nullable:true,
-        length:40,
-        name:"phone"
-        })
+    @Column()
     phone:string | null;
         
     @Column()

@@ -1,8 +1,11 @@
 var express = require("express");
 var app = express();
-const jwt = require('jsonwebtoken');
-var bodyParser = require("body-parser");
+
+var bodyParser = require('body-parser');
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+const jwt = require('jsonwebtoken');
 var key = require("../config/secret");
 var mToken;
 
@@ -17,10 +20,8 @@ async function login(req,res) {
         res.json({
           token
         });
-        setToken(token);
-
-    }
-    
+      setToken(token);
+      }
 )};
 
 function setToken(token){
@@ -30,5 +31,4 @@ function getToken(){
   return mToken;
 }
 
-
-  module.exports = { login,getToken};
+module.exports = { login,getToken};

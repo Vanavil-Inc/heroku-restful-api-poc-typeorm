@@ -19,21 +19,24 @@ function accountGetAllAction(request, response) {
     if (typeof authorizationHeader !== 'undefined') {
     let [, token] = authorizationHeader.split(' ');
 
-    if (token != User.getToken()) {
-        response.sendStatus(403) // Forbidden, you're not logged in
-        console.log("User not logged in");
+        if (token != User.getToken()) {
+            response.sendStatus(403) // Forbidden, you're not logged in
+            console.log("User not logged in");
+        } else {
+            return __awaiter(this, void 0, void 0, function* () {
+                // get a account repository to perform operations with account
+                const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
+                // load a account by a given account id
+                const accounts = yield accountRepository.find();
+                // return loaded accounts
+                response.json({
+                    success: true,
+                    result: accounts,
+                });
+            });
+        }
     } else {
-        return __awaiter(this, void 0, void 0, function* () {
-            // get a account repository to perform operations with account
-            const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
-            // load a account by a given account id
-            const accounts = yield accountRepository.find();
-            // return loaded accounts
-            response.send(accounts);
-        });
-    }
-  } else {
-        response.sendStatus(403);
+        response.sendStatus(400);
     }
 }
 exports.accountGetAllAction = accountGetAllAction;
