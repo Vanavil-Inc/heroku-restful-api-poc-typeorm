@@ -50,7 +50,7 @@ typeorm_1.createConnection().then((connection) => __awaiter(this, void 0, void 0
         
         log.triggerAllLogs();
         
-     } , 3000);
+     } , 60000);
     
 
     console.log("Express application is up and running on port ", port);

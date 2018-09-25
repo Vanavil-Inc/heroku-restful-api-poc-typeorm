@@ -27,7 +27,7 @@ function triggerAllLogs(request, response) {
 
             // get last 5 minutes data from the logs
             const triggerLog = yield triggerRepository.createQueryBuilder("_trigger_log").where(
-                "created_at > NOW() - INTERVAL '5 minutes'"
+                "created_at > NOW() - INTERVAL '1 minutes'"
             ).getMany();
 
             // response.send(triggerLog);

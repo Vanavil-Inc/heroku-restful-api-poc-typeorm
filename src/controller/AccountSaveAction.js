@@ -33,12 +33,13 @@ function accountSaveAction(request, response, next) {
                     if(matched) {
                         const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
                         const newAccount = accountRepository.create(request.body);
-                        accountRepository.save(newAccount);
-                        response.json({
-                            success: true,
-                            message:"Successfully Inserted",
-                            result: newAccount
-                        })
+                        accountRepository.save(newAccount).then(accountOutput => {
+                            response.json({
+                                success: true,
+                                message:"Successfully Inserted",
+                                result: accountOutput
+                            })
+                        });
                     } else{
                         response.json({
                             success: false,

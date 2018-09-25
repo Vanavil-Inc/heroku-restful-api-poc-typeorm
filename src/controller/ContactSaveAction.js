@@ -30,12 +30,13 @@ function contactSaveAction(request, response) {
                     if(matched) {
                         const contactRepository = typeorm_1.getManager().getRepository(Contact_1.Contact); 
                         const newContact = contactRepository.create(request.body);
-                        contactRepository.save(newContact);
-                        response.json({
-                            success: true,
-                            message:"Successfully Inserted",
-                            result: newContact
-                        })
+                        contactRepository.save(newContact).then(contactOutput => {
+                            response.json({
+                                success: true,
+                                message:"Successfully Inserted",
+                                result: contactOutput
+                            })
+                        });
                     } else{
                         response.json({
                             success: false,
