@@ -18,16 +18,7 @@ var the_interval = minutes * 60 * 1000;
  * Loads account by a given id.
  */
 function triggerAllLogs(request, response) {
-    let authorizationHeader = request.headers['authorization'] || request.headers['Authorization']
-    if (typeof authorizationHeader !== 'undefined') {
-    let [, token] = authorizationHeader.split(' ');
-
-    // const intervalObj = setInterval(() => {
-
-    if (token != User.getToken()) {
-        response.sendStatus(403) // Forbidden, you're not logged in
-        console.log("User not logged in");
-    } else {
+    
         return __awaiter(this, void 0, void 0, function* () {
             // get a account repository to perform operations with account
             const triggerRepository = typeorm_1.getManager().getRepository(TriggerLog_1._trigger_log);
@@ -39,12 +30,10 @@ function triggerAllLogs(request, response) {
                 "created_at > NOW() - INTERVAL '5 minutes'"
             ).getMany();
 
-            response.send(triggerLog);
-        });
-    }
-//   } , 3000);
-} else {
-        response.sendStatus(403);
-    }
-}
+            // response.send(triggerLog);
+            console.log(triggerLog);
+            
+        }); 
+ }
+
 exports.triggerAllLogs = triggerAllLogs;

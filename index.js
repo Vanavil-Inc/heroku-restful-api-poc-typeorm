@@ -13,6 +13,8 @@ const typeorm_1 = require("typeorm");
 const express = require("express");
 const bodyParser = require("body-parser");
 const routes_1 = require("./src/config/routes");
+const log = require("./src/services/TriggerLogService");
+var count = 0;
 
 //port number to run the app
 const port = process.env.PORT || 5000
@@ -24,6 +26,8 @@ typeorm_1.createConnection().then((connection) => __awaiter(this, void 0, void 0
     // create express app
     const app = express();
     app.use(bodyParser.json());
+
+    
 
     // register all application routes
     routes_1.AppRoutes.forEach(route => {
@@ -41,6 +45,14 @@ typeorm_1.createConnection().then((connection) => __awaiter(this, void 0, void 0
 
     // run app
     app.listen(port);
+
+    setInterval(() => {
+        
+        log.triggerAllLogs();
+        
+     } , 3000);
+    
+
     console.log("Express application is up and running on port ", port);
 })).catch(error => console.log("TypeORM connection error: ", error));
 //# sourceMappingURL=index.js.map
