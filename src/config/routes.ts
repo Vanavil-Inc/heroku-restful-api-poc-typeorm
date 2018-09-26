@@ -28,8 +28,8 @@ export const AppRoutes = [
         action: accountGetByIdAction
     },
     {
-        path: "/accounts/page/:id",
-        method: "get",
+        path: "/accounts/page",
+        method: "post",
         action: accountGetByPageAction
     },
     {

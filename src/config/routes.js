@@ -31,8 +31,8 @@ exports.AppRoutes = [
         action: AccountGetByIdAction_1.accountGetByIdAction
     },
     {
-        path: "/accounts/page/:id",
-        method: "get",
+        path: "/accounts/page",
+        method: "post",
         action: AccountGetByPageAction_1.accountGetByPageAction
     },
     {

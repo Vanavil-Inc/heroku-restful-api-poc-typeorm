@@ -11,10 +11,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const Account_1 = require("../entity/Account");
 const User = require("../controller/UserController");
-//hardcoded size variable for page
-var size = 10;
 
-var size, skip, pagenumber, pagetotal;
+var size, skip, pagenumber, pagetotal, size, search;
 
 /**
  * Loads account by a given id.
@@ -34,8 +32,10 @@ function accountGetByPageAction(request, response) {
             // getting account list for help in pagination
             const acclist = yield accountRepository.find();
             var acctotal = Object.keys(acclist).length;
+            // pulling page size information
+            size = parseInt(request.body.size);
             // determines by how many items to skip based on page selection
-            pagenumber = Number(request.params.id);
+            pagenumber = parseInt(request.body.page);
             pagetotal = Math.ceil(acctotal/size);
             // logic for page number range
             if ((pagenumber <= pagetotal) && (pagenumber >= 1)) {
@@ -45,19 +45,33 @@ function accountGetByPageAction(request, response) {
               response.end();
               return;
             }
-            // load accounts by given page number by given size
-            const account = yield accountRepository.createQueryBuilder("accounts").select([
-              "accounts.id",
-              "accounts.name"
-            ]).orderBy("accounts.id", "ASC").skip(skip).take(size).getMany();
+             //load accounts by given page number by given size
+            //  const account = yield accountRepository.createQueryBuilder("accounts").select([
+            //    "accounts.id",
+            //    "accounts.name"
+            // ]).orderBy("accounts.id", "ASC").skip(skip).take(size).getMany();
+            // Load accounts by body specified parameter
+            search = String(request.body.search).split(" ");
+            var data = [];
+            for (var i = 0; i < search.length; i++) {
+              // data += "\"accounts." + search[i] + "\", ";
+              // data.push("\"accounts\".\"" + search[i] + "\"");
+              data.push(search[i]);
+            }
+            console.log(data);
+            console.log(data.length);
+            // data = String(data.slice(0,-2));
+            // console.log(data.length);
+            // console.log(data);
+            const account = yield accountRepository.createQueryBuilder("accounts").select(data).orderBy("accounts.id", "ASC").skip(skip).take(size).getMany();
             // if account was not found return 404 to the client
             if (!account) {
                 response.status(404);
                 response.end();
                 return;
             }
-            // return loaded account
-            response.send(account);
+            // return loaded account and total page number
+            response.send({account:account, pagetotal:pagetotal});
         });
   }
      } else {
