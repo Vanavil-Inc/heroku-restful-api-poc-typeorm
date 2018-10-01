@@ -32,29 +32,24 @@ function accountGetByPageAction(request, response) {
         let validator = new validatorColumn(request.body,{
           size:'required|integer',
           page:'required|integer',
-          fieldlist:'required|string'
+          fieldlist:'required|string',
+          filter:'object'
         });
 
         let validatorf = new validatorColumn(request.body.filter, {
-          filter:'object',
-          'filter.condition':'array',
-          'filter.wherefilter':'array'
+          condition:'array',
+          wherefilter:'array',
+          'condition.*':'string',
+          'wherefilter.*':'string'
         });
 
-        let validatora1 = new validatorColumn(request.body.filter.condition, {
-          'condition.*':'required|string'
-        });
-
-        let validatora2 = new validatorColumn(request.body.filter.wherefilter, {
-          'wherefilter.*':'required|string'
-        });
-
+        // console.log("Validations equals: " + request.body.page + "\n" + request.body.size + "\n" + request.body.fieldlist + "\n" + request.body.filter);
 
         // validator check
         validator.check().then(function (matched) {
           if(!matched) {
             response.json({
-              message:"Please Check To Make Sure Inputs Are Of Proper Type"
+              message:"Please Check To Make Sure Page, Size, SELECT, And/Or Filter Object Are Correct"
             })
             response.end();
           }
@@ -62,29 +57,46 @@ function accountGetByPageAction(request, response) {
         validatorf.check().then(function (matched) {
           if(!matched) {
             response.json({
-              message:"Please Check To Make Sure Inputs Are Of Proper Type"
+              message:"Please Check To Make Sure Filter Object Array Is Correct"
             })
             response.end();
           }
         })
-        validatora1.check().then(function (matched) {
-          if(!matched) {
-            response.json({
-              message:"Please Check To Make Sure Inputs Are Of Proper Type"
-            })
-            response.end();
-          }
-        })
-        validatora2.check().then(function (matched) {
-          if(!matched) {
-            response.json({
-              message:"Please Check To Make Sure Inputs Are Of Proper Type"
-            })
-            response.end();
-          }
-        })
+
         // get a account repository to perform operations with account
+        // try {
+        //   const accountRepository = typeorm_1.getManager().getRepository(Account_1.Accounts);
+        // }
+        // catch (er) {
+        //   if (er === "ConnectionNotFoundError") {
+        //       console.log("Test Successful!");
+        //   }
+        //   if (er === "RpositoryNotFoundError") {
+        //       console.log("Test Successful!");
+        //   }
+        // }
         const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
+        let repCon = accountRepository.manager.connection.isConnected;
+        console.log(repCon);
+        if (repCon !== true) {
+          for (let j = 0; j < 4; j++) {
+            setTimeout(async function() {
+              console.log("========================================================");
+              console.log("Attempt #" + j + " to Reconnect...");
+              await accountRepository.manager.connection.connect();
+              console.log("========================================================");
+            }, 3000);
+            if (repCon === true) {
+              break;
+            } else if ((j === 3) && (repCon === false)) {
+              response.json({
+                message: "Cannot Connect to the Database"
+              })
+              response.end();
+            }
+          }
+        }
+
         // getting account list for help in pagination
         const acclist = yield accountRepository.find();
         const qb = accountRepository.createQueryBuilder("accounts");
@@ -98,7 +110,9 @@ function accountGetByPageAction(request, response) {
         if ((pagenumber <= pagetotal) && (pagenumber >= 1)) {
           skip = (pagenumber - 1) * size;
         } else {
-          response.send("Requested Page is Unavailable");
+          response.json({
+            message: "Requested Page is Unavailable"
+          })
           response.end();
           return;
         }
@@ -112,7 +126,6 @@ function accountGetByPageAction(request, response) {
         qb.select(datafl)
         // Adding the filter criteria
         filter = request.body.filter;
-        console.log(filter);
         if (filter) {
           if (filter.condition.length >= 2) {
             qb.where(filter.wherefilter[0]);
