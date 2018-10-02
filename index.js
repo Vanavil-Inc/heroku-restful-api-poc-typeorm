@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
+require("log-timestamp");
 const typeorm_1 = require("typeorm");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -46,11 +47,11 @@ typeorm_1.createConnection().then((connection) => __awaiter(this, void 0, void 0
     // run app
     app.listen(port);
 
-    setInterval(() => {
+    //setInterval(() => {
         
-        log.triggerAllLogs();
+   //     log.triggerAllLogs();
         
-     } , 60000);
+    // } , 60000);
     
 
     console.log("Express application is up and running on port ", port);
