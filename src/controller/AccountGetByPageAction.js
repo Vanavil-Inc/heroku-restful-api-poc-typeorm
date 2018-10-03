@@ -37,10 +37,16 @@ function accountGetByPageAction(request, response) {
         });
 
         let validatorf = new validatorColumn(request.body.filter, {
-          condition:'array',
+          wherecondition:'array',
           wherefilter:'array',
-          'condition.*':'string',
-          'wherefilter.*':'string'
+          ordercondition:'array',
+          havecondition:'array',
+          groupfilter:'array',
+          'wherecondition.*':'string',
+          'wherefilter.*':'string',
+          'orderfilter.*':'string',
+          'havefilter.*':'string',
+          'groupfilter.*':'string'
         });
 
         // console.log("Validations equals: " + request.body.page + "\n" + request.body.size + "\n" + request.body.fieldlist + "\n" + request.body.filter);
@@ -63,6 +69,27 @@ function accountGetByPageAction(request, response) {
           }
         })
 
+        filter = request.body.filter;
+        if (filter.wherecondition.length !== filter.wherefilter.length) {
+          response.json({
+            message:"Please Check To Make Sure WHERE Condition/Filter Is Correct"
+          })
+          response.end();
+        }
+
+        if (filter.ordercondition.length !== filter.orderfilter.length) {
+          response.json({
+            message:"Please Check To Make Sure ORDER Condition/Filter Is Correct"
+          })
+          response.end();
+        }
+
+        if (filter.havecondition.length !== filter.havefilter.length) {
+          response.json({
+            message:"Please Check To Make Sure HAVE Condition/Filter Is Correct"
+          })
+          response.end();
+        }
         // get a account repository to perform operations with account
         const accountRepository = typeorm_1.getManager().getRepository(Account_1.Account);
 
@@ -88,10 +115,6 @@ function accountGetByPageAction(request, response) {
         //     }
         //   }
         // }
-
-        // getting account list for help in pagination
-        // const acclist = yield accountRepository.find();
-
 
         //variables for retry logic
         var maxNoOfRetries = 3; // maximum 3 retries
@@ -135,15 +158,51 @@ function accountGetByPageAction(request, response) {
               // Forming the QueryBuilder
               qb.select(datafl)
               // Adding the filter criteria
-              filter = request.body.filter;
               if (filter) {
-                if (filter.condition.length >= 2) {
+                // checking where filter
+                if ((filter.wherefilter) && (filter.wherefilter.length !== 0)) {
                   qb.where(filter.wherefilter[0]);
-                  for (var i = 1; i < filter.wherefilter.length; i++) {
-                    if (filter.condition[i] === "AND") {
-                      qb.andWhere(filter.wherefilter[i]);
-                    } else{
-                      qb.orWhere(filter.wherefilter[i]);
+                  if (filter.wherecondition.length >= 2) {
+                    for (var i = 1; i < filter.wherefilter.length; i++) {
+                      if (filter.wherecondition[i] === "AND") {
+                        qb.andWhere(filter.wherefilter[i]);
+                      } else {
+                        qb.orWhere(filter.wherefilter[i]);
+                      }
+                    }
+                  }
+                }
+                // checking group filter
+                if ((filter.groupfilter) && (filter.groupfilter.length !== 0)) {
+                  console.log("=======================================");
+                  console.log("Group RECOGNIZED: " + filter.groupfilter);
+                  console.log("=======================================");
+                  qb.groupBy(filter.groupfilter[0]);
+                  if (filter.groupfilter.length >= 2) {
+                    for (var i = 1; i < filter.orderfilter.length; i++) {
+                      qb.addGroupBy(filter.groupfilter[i]);
+                    }
+                  }
+                }
+                // checking have filter
+                if ((filter.havefilter) && (filter.havefilter.length !== 0)) {
+                  qb.having(filter.havefilter[0]);
+                  if (filter.havecondition.length >= 2) {
+                    for (var i = 1; i < filter.havefilter.length; i++) {
+                      if (filter.havecondition[i] === "AND") {
+                        qb.andHaving(filter.havefilter[i]);
+                      } else {
+                        qb.orHaving(filter.havefilter[i]);
+                      }
+                    }
+                  }
+                }
+                // checking order filter
+                if ((filter.orderfilter) && (filter.orderfilter.length !== 0)) {
+                  qb.orderBy(filter.orderfilter[0], filter.ordercondition[0]);
+                  if (filter.ordercondition.length >= 2) {
+                    for (var i = 1; i < filter.orderfilter.length; i++) {
+                      qb.addOrderBy(filter.orderfilter[i], filter.ordercondition[i]);
                     }
                   }
                 }
@@ -159,7 +218,7 @@ function accountGetByPageAction(request, response) {
                 return;
               }
               // Finally putting it all together
-              qb.orderBy("accounts.id", "ASC").skip(skip).take(size);
+              qb.skip(skip).take(size);
               // Load accounts by body specified parameter
               const account = yield qb.getMany();
               // if account was not found return 404 to the client
